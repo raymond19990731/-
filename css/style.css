@@ -1,0 +1,14 @@
+/* 基本樣式 */
+body {font-family: "Noto Sans TC", "Helvetica Neue", Arial, sans-serif;}
+.map-preview iframe {border-radius:6px}
+
+#countdown .h2 {font-weight:700}
+
+/* 三欄式調整 */
+aside .list-group {position:sticky; top:20px}
+
+/* 下拉 submenu 顯示小調整（Bootstrap 5 用 dropend） */
+.dropdown-menu .dropdown-menu {left:100%; top:0}
+
+/* 手機版圖片微調 */
+.card-img-top {height:200px; object-fit:cover}
