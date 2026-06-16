@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="zh-Hant">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>倒數計時 - 王浩瑋 期末專題 國軍裝備知多少</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="css/style.css" rel="stylesheet">
+  </head>
+  <body>
+    <header class="bg-dark text-light py-3"><div class="container"><h1 class="h5 mb-0">王浩瑋 期末專題 國軍裝備知多少</h1></div></header>
+    <div class="container my-4">
+      <div class="row">
+        <aside class="col-md-3">
+          <div class="dropdown mb-3">
+            <button class="btn btn-secondary dropdown-toggle w-100" type="button" id="sideMenuCount" data-bs-toggle="dropdown" aria-expanded="false">網站導覽</button>
+            <ul class="dropdown-menu w-100" aria-labelledby="sideMenuCount">
+              <li><a class="dropdown-item" href="index.html">首頁</a></li>
+              <li><a class="dropdown-item" href="navy.html">海軍裝備介紹</a></li>
+              <li><a class="dropdown-item" href="army.html">陸軍裝備介紹</a></li>
+              <li><a class="dropdown-item" href="airforce.html">空軍裝備介紹</a></li>
+              <li><a class="dropdown-item" href="prices.html">這些裝備多少錢</a></li>
+              <li><a class="dropdown-item active" href="countdown.html">倒數計時頁</a></li>
+            </ul>
+          </div>
+        </aside>
+        <main class="col-md-6 text-center">
+          <h2>距離 2026/08/08 倒數</h2>
+          <div id="countdown-large" class="display-6 mt-4"></div>
+        </main>
+        <aside class="col-md-3">
+          <div class="card text-center p-3">
+            <img src="images/FB_IMG_1767263428633.jpg" style="width:120px;height:120px;object-fit:cover;border-radius:50%;" alt="profile">
+            <div class="mt-2">王浩瑋<br>製作人</div>
+            <div class="card-footer pt-2">
+              <a href="mailto:511172267@cloud.fju.edu.tw" class="btn btn-primary btn-sm me-2">寫信給我</a>
+              <a href="https://www.facebook.com/wang.hao.wei.163714" target="_blank" class="btn btn-primary btn-sm me-2"><img src="images/FBicon.jfif" alt="fb" style="width:16px;height:16px;vertical-align:middle;margin-right:6px">Facebook</a>
+              <a href="https://www.fju.edu.tw" target="_blank" class="btn btn-outline-primary btn-sm">輔大官網</a>
+            </div>
+          </div>
+        </aside>
+      </div>
+    </div>
+    <footer class="bg-dark text-light py-3"><div class="container">姓名：王浩瑋 &nbsp; 學號：511172267</div></footer>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+      (function(){
+        const target = new Date('2026-08-08T00:00:00');
+        function update(){
+          const now = new Date();
+          let diff = Math.max(0, target - now);
+          const days = Math.floor(diff / (1000*60*60*24));
+          const hours = Math.floor((diff/(1000*60*60))%24);
+          const mins = Math.floor((diff/(1000*60))%60);
+          const secs = Math.floor((diff/1000)%60);
+          document.getElementById('countdown-large').textContent = `${days} 天 ${hours} 時 ${mins} 分 ${secs} 秒`;
+        }
+        update(); setInterval(update,1000);
+      })();
+    </script>
+  </body>
+</html>

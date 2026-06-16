@@ -1,0 +1,111 @@
+<!doctype html>
+<html lang="zh-Hant">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>這些裝備多少錢 - 王浩瑋 期末專題 國軍裝備知多少</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="css/style.css" rel="stylesheet">
+  </head>
+  <body>
+    <header class="bg-dark text-light py-3"><div class="container"><h1 class="h5 mb-0">王浩瑋 期末專題 國軍裝備知多少</h1></div></header>
+    <div class="container my-4">
+      <div class="row">
+        <aside class="col-md-3">
+          <div class="dropdown mb-3">
+            <button class="btn btn-secondary dropdown-toggle w-100" type="button" id="sideMenuPrices" data-bs-toggle="dropdown" aria-expanded="false">網站導覽</button>
+            <ul class="dropdown-menu w-100" aria-labelledby="sideMenuPrices">
+              <li><a class="dropdown-item" href="index.html">首頁</a></li>
+              <li><a class="dropdown-item" href="navy.html">海軍裝備介紹</a></li>
+              <li><a class="dropdown-item" href="army.html">陸軍裝備介紹</a></li>
+              <li><a class="dropdown-item" href="airforce.html">空軍裝備介紹</a></li>
+              <li><a class="dropdown-item active" href="prices.html">這些裝備多少錢</a></li>
+              <li><a class="dropdown-item" href="countdown.html">倒數計時頁</a></li>
+            </ul>
+          </div>
+        </aside>
+        <main class="col-md-6">
+          <h2>裝備商品計價器</h2>
+          <p>從下拉選單選擇裝備、設定數量，即可計算小計並加入購物車。</p>
+
+          <div class="card mb-3 p-3">
+            <div class="row g-2 align-items-end">
+              <div class="col-md-6">
+                <label class="form-label">商品</label>
+                <select id="prd-select" class="form-select"></select>
+              </div>
+              <div class="col-md-3">
+                <label class="form-label">單價 (NT$)</label>
+                <input id="unit-price" class="form-control" readonly>
+              </div>
+              <div class="col-md-3">
+                <label class="form-label">數量</label>
+                <input id="qty" type="number" class="form-control" min="1" value="1">
+              </div>
+            </div>
+            <div class="mt-3 d-flex gap-2">
+              <button id="calc-btn" class="btn btn-primary">計算小計</button>
+              <button id="add-btn" class="btn btn-success">加入購物車</button>
+              <div class="ms-auto align-self-center">小計：<strong id="subtotal">NT$0</strong></div>
+            </div>
+          </div>
+
+          <h5>購物車</h5>
+          <div class="table-responsive mb-3"><table class="table table-sm" id="cart-table"><thead><tr><th>商品</th><th class="text-end">單價</th><th class="text-end">數量</th><th class="text-end">小計</th><th></th></tr></thead><tbody></tbody></table></div>
+          <div class="d-flex justify-content-between"><div></div><div>總計：<strong id="grand-total">NT$0</strong></div></div>
+
+          <script>
+            (function(){
+              const select = document.getElementById('prd-select');
+              const unit = document.getElementById('unit-price');
+              const qty = document.getElementById('qty');
+              const subtotal = document.getElementById('subtotal');
+              const addBtn = document.getElementById('add-btn');
+              const cartTable = document.querySelector('#cart-table tbody');
+              const grandTotalEl = document.getElementById('grand-total');
+              const cart = [];
+
+              function fmt(n){ return 'NT$' + n.toLocaleString(); }
+
+              function renderCart(){ cartTable.innerHTML=''; let total=0; cart.forEach((it,idx)=>{ const tr=document.createElement('tr'); tr.innerHTML = `<td>${it.name}</td><td class="text-end">${fmt(it.price)}</td><td class="text-end">${it.qty}</td><td class="text-end">${fmt(it.price*it.qty)}</td><td class="text-end"><button class="btn btn-sm btn-danger remove-btn" data-i="${idx}">移除</button></td>`; cartTable.appendChild(tr); total += it.price*it.qty; }); grandTotalEl.textContent = fmt(total); }
+
+              fetch('json/products.json').then(r=>{ if(!r.ok) throw new Error('no products'); return r.json(); }).then(products=>{
+                products.forEach(p=>{ const o=document.createElement('option'); o.value=p.id; o.textContent=p.name; o.dataset.price = p.price; select.appendChild(o); });
+                select.selectedIndex = 0; updateUnit(); updateSubtotal();
+              }).catch(err=>{
+                document.getElementById('prd-select').innerHTML = '<option value="">無法載入商品</option>';
+                console.error('load products error', err);
+              });
+
+              function getProductFromSelect(){ const opt = select.selectedOptions[0]; if(!opt) return null; return { id: opt.value, name: opt.textContent, price: parseInt(opt.dataset.price||0) }; }
+              function updateUnit(){ const p = getProductFromSelect(); unit.value = p ? p.price.toLocaleString() : ''; }
+              function updateSubtotal(){ const p = getProductFromSelect(); const s = p ? p.price * Math.max(1, parseInt(qty.value||1)) : 0; subtotal.textContent = fmt(s); return s; }
+
+              select.addEventListener('change', ()=>{ updateUnit(); updateSubtotal(); });
+              qty.addEventListener('input', ()=>{ updateSubtotal(); });
+
+              addBtn.addEventListener('click', ()=>{
+                const p = getProductFromSelect(); if(!p || !p.id) return; const q = Math.max(1, parseInt(qty.value||1)); cart.push({name:p.name, price:p.price, qty:q}); renderCart();
+              });
+
+              cartTable.addEventListener('click', e=>{ if(e.target.matches('.remove-btn')){ const i=parseInt(e.target.dataset.i); cart.splice(i,1); renderCart(); } });
+            })();
+          </script>
+        </main>
+        <aside class="col-md-3">
+          <div class="card text-center p-3">
+            <img src="images/FB_IMG_1767263428633.jpg" style="width:120px;height:120px;object-fit:cover;border-radius:50%;" alt="profile">
+            <div class="mt-2">王浩瑋<br>製作人</div>
+            <div class="card-footer pt-2">
+              <a href="mailto:511172267@cloud.fju.edu.tw" class="btn btn-primary btn-sm me-2">寫信給我</a>
+              <a href="https://www.facebook.com/wang.hao.wei.163714" target="_blank" class="btn btn-primary btn-sm me-2"><img src="images/FBicon.jfif" alt="fb" style="width:16px;height:16px;vertical-align:middle;margin-right:6px">Facebook</a>
+              <a href="https://www.fju.edu.tw" target="_blank" class="btn btn-outline-primary btn-sm">輔大官網</a>
+            </div>
+          </div>
+        </aside>
+      </div>
+    </div>
+    <footer class="bg-dark text-light py-3"><div class="container">姓名：王浩瑋 &nbsp; 學號：511172267</div></footer>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+  </body>
+</html>

@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="zh-Hant">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>空軍裝備介紹 - 王浩瑋 期末專題 國軍裝備知多少</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="css/style.css" rel="stylesheet">
+  </head>
+  <body>
+    <header class="bg-dark text-light py-3"><div class="container"><h1 class="h5 mb-0">王浩瑋 期末專題 國軍裝備知多少</h1></div></header>
+    <div class="container my-4">
+      <div class="row">
+        <aside class="col-md-3">
+          <div class="dropdown mb-3">
+            <button class="btn btn-secondary dropdown-toggle w-100" type="button" id="sideMenuAir" data-bs-toggle="dropdown" aria-expanded="false">網站導覽</button>
+            <ul class="dropdown-menu w-100" aria-labelledby="sideMenuAir">
+              <li><a class="dropdown-item" href="index.html">首頁</a></li>
+              <li><a class="dropdown-item" href="navy.html">海軍裝備介紹</a></li>
+              <li><a class="dropdown-item" href="army.html">陸軍裝備介紹</a></li>
+              <li><a class="dropdown-item active" href="airforce.html">空軍裝備介紹</a></li>
+              <li><a class="dropdown-item" href="prices.html">這些裝備多少錢</a></li>
+              <li><a class="dropdown-item" href="countdown.html">倒數計時頁</a></li>
+            </ul>
+          </div>
+        </aside>
+        <main class="col-md-6">
+          <h2>空軍裝備介紹</h2>
+          <div id="air-equip-list"></div>
+          <script>
+            (function(){
+              const container = document.getElementById('air-equip-list');
+              fetch('json/ROCAF_meta.json').then(r=>{ if(!r.ok) throw new Error('no meta'); return r.json(); }).then(data=>{ data.forEach(item=>createCard(item,'images/ROCAF_eq_pic/')); }).catch(err=>{
+                container.innerHTML = '<div class="alert alert-warning">無法載入 metadata：images/ROCAF_meta.json，請確認檔案是否存在並為有效 JSON。</div>';
+                console.error('load meta error', err);
+              });
+
+              function createCard(item, base){
+                const fn = item.file;
+                const card = document.createElement('div'); card.className='card mb-3 p-2';
+                const row = document.createElement('div'); row.className='row g-0 align-items-center';
+                const colImg = document.createElement('div'); colImg.className='col-auto';
+                const img = document.createElement('img'); img.src = base + encodeURIComponent(fn); img.style.width='120px'; img.style.height='auto'; img.className='me-3'; img.alt=fn; colImg.appendChild(img);
+                const colText = document.createElement('div'); colText.className='col';
+                const body = document.createElement('div'); body.className='card-body p-2';
+                const title = document.createElement('h5'); title.className='card-title mb-1'; title.textContent = item.title || fn.replace(/\.[^.]+$/,'');
+                const desc = document.createElement('p'); desc.className='card-text small text-muted'; desc.textContent = item.desc || '簡短介紹（請自行替換為詳細說明）';
+                body.appendChild(title); body.appendChild(desc); colText.appendChild(body);
+                row.appendChild(colImg); row.appendChild(colText); card.appendChild(row); container.appendChild(card);
+              }
+            })();
+          </script>
+        </main>
+        <aside class="col-md-3">
+          <div class="card text-center p-3">
+            <img src="images/FB_IMG_1767263428633.jpg" style="width:120px;height:120px;object-fit:cover;border-radius:50%;" alt="profile">
+            <div class="mt-2">王浩瑋<br>製作人</div>
+            <div class="card-footer pt-2">
+              <a href="mailto:511172267@cloud.fju.edu.tw" class="btn btn-primary btn-sm me-2">寫信給我</a>
+              <a href="https://www.facebook.com/wang.hao.wei.163714" target="_blank" class="btn btn-primary btn-sm me-2"><img src="images/FBicon.jfif" alt="fb" style="width:16px;height:16px;vertical-align:middle;margin-right:6px">Facebook</a>
+              <a href="https://www.fju.edu.tw" target="_blank" class="btn btn-outline-primary btn-sm">輔大官網</a>
+            </div>
+          </div>
+        </aside>
+      </div>
+    </div>
+    <footer class="bg-dark text-light py-3"><div class="container">姓名：王浩瑋 &nbsp; 學號：511172267</div></footer>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+  </body>
+</html>
