@@ -26,7 +26,7 @@
         </aside>
         <main class="col-md-6">
           <h2>裝備商品計價器</h2>
-          <p>從下拉選單選擇裝備、設定數量，即可計算小計並加入購物車。</p>
+          <p>從下拉選單選擇裝備、設定數量，即可計算小計並加入採購單。</p>
 
           <div class="card mb-3 p-3">
             <div class="row g-2 align-items-end">
@@ -44,13 +44,12 @@
               </div>
             </div>
             <div class="mt-3 d-flex gap-2">
-              <button id="calc-btn" class="btn btn-primary">計算小計</button>
-              <button id="add-btn" class="btn btn-success">加入購物車</button>
+              <button id="add-btn" class="btn btn-success">加入採購單</button>
               <div class="ms-auto align-self-center">小計：<strong id="subtotal">NT$0</strong></div>
             </div>
           </div>
 
-          <h5>購物車</h5>
+          <h5>採購清單</h5>
           <div class="table-responsive mb-3"><table class="table table-sm" id="cart-table"><thead><tr><th>商品</th><th class="text-end">單價</th><th class="text-end">數量</th><th class="text-end">小計</th><th></th></tr></thead><tbody></tbody></table></div>
           <div class="d-flex justify-content-between"><div></div><div>總計：<strong id="grand-total">NT$0</strong></div></div>
 
@@ -73,7 +72,7 @@
                 products.forEach(p=>{ const o=document.createElement('option'); o.value=p.id; o.textContent=p.name; o.dataset.price = p.price; select.appendChild(o); });
                 select.selectedIndex = 0; updateUnit(); updateSubtotal();
               }).catch(err=>{
-                document.getElementById('prd-select').innerHTML = '<option value="">無法載入商品</option>';
+                document.getElementById('prd-select').innerHTML = '<option value="">無法載入裝備</option>';
                 console.error('load products error', err);
               });
 
